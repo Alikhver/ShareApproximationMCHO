@@ -1,4 +1,8 @@
-f = open("SBER_221111_221206.txt", 'r')
+import seaborn as sns
+
+# f = open("SBER_211207_221207.txt", 'r')
+f = open("PPX-TDG_211207_221207.txt", 'r')
+
 
 print(f.readline())
 
@@ -87,8 +91,13 @@ print(current_average_price_zone)
 print(current_average_price)
 
 outcomes = transition_matrix[current_average_price_zone]
+outcome_sum = 0
+
+for o in outcomes:
+    outcome_sum += o
+
 for i in range(len(outcomes)):
     if outcomes[i] != 0:
         zone_limits = get_zone_limits(i)
         print(
-            "Probability of price change to limits {} - {} in hour is : {}%".format(zone_limits[0], zone_limits[1], 33))
+            "Probability of price change to limits {} - {} in hour is {}%".format(zone_limits[0], zone_limits[1], outcomes[i] / outcome_sum))
