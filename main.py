@@ -1,14 +1,15 @@
-# f = open("SBER_211207_221207.txt", 'r')
-f = open("PPX-TDG_211207_221207.txt", 'r')
+f = open("PPX-TDG_211206_221206f (1).txt", 'r')
 
 print(f.readline())
 
 max_ = 0
 min_ = 2147483647
 duration = 0
+zones_amount = 100
+zones = []
 
 
-def print_transition_matrix(a):
+def print_matrix(a):
     for i in range(len(a)):
         for j in range(len(a[i])):
             print(a[i][j], end=' ')
@@ -42,6 +43,23 @@ def get_most_probable_zone(outcomes):
     return outcomes.index(s)
 
 
+# def occurrence_to_transition_matrix(matrix):
+#     transition_matrix = []
+#
+#     for row in matrix:
+#         sum_ = 0
+#         for i in row:
+#             if i != 0:
+#                 sum_ += i
+#
+#         nrow = []
+#         for i in row:
+#             nrow.append(i / sum_)
+#         transition_matrix.append(nrow)
+#
+#     return transition_matrix
+
+
 avg_prices = []
 
 for line in f:
@@ -57,12 +75,9 @@ for line in f:
     if low < min_:
         min_ = low
 
-zones_amount = 20
-zones = []
-
 duration = (max_ - min_) / zones_amount
 
-transition_matrix = [[0] * zones_amount for _ in range(zones_amount)]
+occurrence_matrix = [[0] * zones_amount for _ in range(zones_amount)]
 
 m = max_ - duration
 zone = 0
@@ -74,7 +89,7 @@ while m >= min_:
         m -= duration
         zone += 1
     else:
-        transition_matrix[zone][zone] += 1
+        occurrence_matrix[zone][zone] += 1
         prev_zone = zone
         break
 
@@ -88,18 +103,20 @@ for price in avg_prices:
             m -= duration
             zone += 1
         else:
-            transition_matrix[prev_zone][zone] += 1
+            occurrence_matrix[prev_zone][zone] += 1
             prev_zone = zone
             break
 
-print_transition_matrix(transition_matrix)
+print(print_matrix(occurrence_matrix))
 
 current_average_price = avg_prices[-1]
 current_average_price_zone = get_zone(current_average_price)
-print(current_average_price_zone)
-print(current_average_price)
 
-outcomes = transition_matrix[current_average_price_zone]
+print("Zone duration: {}".format(duration))
+print("Current average price zone: {}".format(current_average_price_zone))
+print("Current average price : {} ".format(current_average_price))
+
+outcomes = occurrence_matrix[current_average_price_zone]
 
 outcome_sum = get_outcomes_sum(outcomes)
 
@@ -114,9 +131,9 @@ print("Enter the number of hours for which you want to receive a prognosis: ")
 hours = int(input())
 
 for _ in range(hours):
-    outcomes = transition_matrix[zone]
+    outcomes = occurrence_matrix[zone]
     next_zone = get_most_probable_zone(outcomes)
-    transition_matrix[zone][next_zone] += 1
+    occurrence_matrix[zone][next_zone] += 1
     zone = next_zone
 
 print(zone)
