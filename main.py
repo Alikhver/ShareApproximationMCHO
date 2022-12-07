@@ -1,12 +1,10 @@
-import seaborn as sns
-
 # f = open("SBER_211207_221207.txt", 'r')
 f = open("PPX-TDG_211207_221207.txt", 'r')
 
 print(f.readline())
 
 max_ = 0
-min = 2147483647
+min_ = 2147483647
 duration = 0
 
 
@@ -20,7 +18,7 @@ def print_transition_matrix(a):
 def get_zone(price):
     zone = 0
     m = max_ - duration
-    while m >= min:
+    while m >= min_:
         if m >= price:
             m -= duration
             zone += 1
@@ -56,13 +54,13 @@ for line in f:
     if high > max_:
         max_ = high
 
-    if low < min:
-        min = low
+    if low < min_:
+        min_ = low
 
 zones_amount = 20
 zones = []
 
-duration = (max_ - min) / zones_amount
+duration = (max_ - min_) / zones_amount
 
 transition_matrix = [[0] * zones_amount for _ in range(zones_amount)]
 
@@ -71,7 +69,7 @@ zone = 0
 prev_zone = 0
 
 # find zone of first element
-while m >= min:
+while m >= min_:
     if m >= avg_prices[0]:
         m -= duration
         zone += 1
@@ -85,7 +83,7 @@ for price in avg_prices:
     m = max_ - duration
     zone = 0
 
-    while m >= min:
+    while m >= min_:
         if m >= price:
             m -= duration
             zone += 1
