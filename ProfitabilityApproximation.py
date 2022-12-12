@@ -4,7 +4,7 @@ f.readline()
 
 max_ = 0
 min_ = 2147483647
-Zones_amount = 4
+Zones_amount = 7
 Degree = 3
 duration = 0
 zones = []
@@ -26,6 +26,10 @@ def find_profitability_zone(p):
         else:
             return counter
     return counter - 1
+
+
+def get_zone_limits(z):
+    return [max_ - ((z + 1) * duration), max_ - (z * duration)]
 
 
 def get_average_zone_profitability(zone):
@@ -61,16 +65,16 @@ probabilities = {}
 
 for i in range(len(zones) - Degree):
     sequence = tuple(zones[j] for j in range(i, i + Degree + 1))
-    zone = tuple(sequence[:-1])
+    z = tuple(sequence[:-1])
     if sequence in occurences.keys():
         occurences[sequence] = occurences[sequence] + 1
     else:
         occurences[sequence] = 1
 
-    if zone in sequences.keys():
-        sequences[zone] += 1
+    if z in sequences.keys():
+        sequences[z] += 1
     else:
-        sequences[zone] = 1
+        sequences[z] = 1
 
 print(occurences)
 print(sequences)
@@ -88,10 +92,10 @@ for i in range(Zones_amount + 1):
     last_sequence.append(i)
     prob_sequence = tuple(j for j in last_sequence)
     if prob_sequence in probabilities.keys():
-        prob = probabilities[prob_sequence]
-        print("Probability of next sequence to be {} is {}. Profitability for next week: {}".format(prob_sequence, prob,
-                                                                                                    get_average_zone_profitability(
-                                                                                                        i)))
+        print("Probability of next sequence to be {} is {}. Profitability for next week: {}".format(prob_sequence,
+                                                                                                    probabilities[
+                                                                                                        prob_sequence],
+                                                                                                    get_zone_limits(i)))
         printed += 1
     last_sequence.pop()
 if printed == 0:
