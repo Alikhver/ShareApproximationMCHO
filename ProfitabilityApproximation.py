@@ -1,11 +1,12 @@
-f = open("KER.PA.csv", 'r')
+# f = open("KER.PA.csv", 'r')
+f = open("input.csv", 'r')
 
 f.readline()
 
 max_ = 0
 min_ = 2147483647
-Zones_amount = 7
-Degree = 3
+Zones_amount = 2
+Degree = 4
 duration = 0
 zones = []
 profitabilities = []
