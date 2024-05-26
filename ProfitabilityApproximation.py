@@ -1,5 +1,5 @@
 # f = open("KER.PA.csv", 'r')
-f = open("input.csv", 'r')
+f = open("input-ProfitabilityApproximation.csv", 'r')
 
 f.readline()
 
